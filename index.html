@@ -23,6 +23,32 @@ main{max-width:760px;margin:auto;padding:14px}
 nav{position:fixed;bottom:0;left:0;right:0;background:#111b15;border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:8px 4px calc(8px + env(safe-area-inset-bottom));z-index:5}
 nav button{background:none;border:0;color:var(--muted);font-size:11px;padding:6px 4px;display:flex;flex-direction:column;gap:4px;align-items:center}
 nav button.active{color:var(--green)}
+  
+nav .nav-link {
+  background: none;
+  border: 0;
+  color: var(--muted);
+  font-size: 11px;
+  padding: 6px 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  flex: 1;
+  min-width: 0;
+}
+
+nav button {
+  flex: 1;
+  min-width: 0;
+}
+
+nav .nav-link span {
+  font-size: 19px;
+}
+
 nav span{font-size:19px}
 section.page{display:none}
 section.page.active{display:block}
@@ -131,7 +157,6 @@ th{color:var(--muted);font-weight:600}
   </div>
 
 </section>
-<section id="workouts" class="page">
   
 <!-- WORKOUT PAGE -->
 <section id="workouts" class="page">
@@ -253,13 +278,16 @@ th{color:var(--muted);font-weight:600}
 
 </main>
 
+
 <nav>
   <button class="active" data-page="home" onclick="showPage('home')"><span>⌂</span>Home</button>
   <button data-page="workouts" onclick="showPage('workouts')"><span>🏋</span>Workout</button>
   <button data-page="weight" onclick="showPage('weight')"><span>⚖</span>Weight</button>
   <button data-page="diet" onclick="showPage('diet')"><span>🥗</span>Diet</button>
   <button data-page="habits" onclick="showPage('habits')"><span>✓</span>Habits</button>
+  <a href="./affirmations.html" class="nav-link"><span>🌟</span>Affirmations</a>
 </nav>
+
 
 <script>
 const KEY='fitTracker2026';
