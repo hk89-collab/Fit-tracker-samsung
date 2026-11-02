@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#101713">
+<meta name="description" content="Personal fitness, workout, weight and nutrition tracker">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<title>Fit Tracker</title>
+<style>
+:root{--bg:#0d1411;--panel:#17221c;--panel2:#1e2b24;--text:#f3f7f4;--muted:#a8b8ae;--green:#9be3ae;--line:#2d4035;--orange:#f2c078}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px system-ui,-apple-system,Segoe UI,sans-serif;padding-bottom:86px}
+header{padding:22px 18px 14px;background:linear-gradient(145deg,#1a3023,#101713);position:sticky;top:0;z-index:3;border-bottom:1px solid var(--line)}
+.top{display:flex;justify-content:space-between;align-items:center}.brand{font-size:12px;letter-spacing:1.5px;color:var(--green);font-weight:800}.date{font-size:12px;color:var(--muted)}
+h1{font-size:25px;margin:7px 0 2px}header p{margin:0;color:var(--muted);font-size:13px}
+main{max-width:760px;margin:auto;padding:14px}
+nav{position:fixed;bottom:0;left:0;right:0;background:#111b15;border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:8px 4px calc(8px + env(safe-area-inset-bottom));z-index:5}
+nav button{background:none;border:0;color:var(--muted);font-size:11px;padding:6px 4px;display:flex;flex-direction:column;gap:4px;align-items:center}nav button.active{color:var(--green)}nav span{font-size:19px}
+section.page{display:none}section.page.active{display:block}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:15px;margin:10px 0}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.metric{background:var(--panel2);border-radius:13px;padding:13px}.metric small{display:block;color:var(--muted);font-size:11px}.metric strong{font-size:24px;display:block;margin-top:4px}.green{color:var(--green)}
+h2{font-size:18px;margin:5px 0 12px}h3{font-size:15px;margin:0 0 8px}p.sub{color:var(--muted);font-size:12px;margin:3px 0}
+button,.btn{background:var(--green);color:#102016;border:0;border-radius:11px;padding:11px 14px;font-weight:750;font-size:13px;cursor:pointer}
+button.secondary{background:var(--panel2);color:var(--text);border:1px solid var(--line)}
+input,select{width:100%;background:#0f1913;color:var(--text);border:1px solid var(--line);border-radius:10px;padding:11px;font:inherit;margin:5px 0 10px}
+label{display:block;color:var(--muted);font-size:12px;margin-top:7px}
+.row{display:flex;gap:8px;align-items:center}.row>*{flex:1}.bar{height:9px;background:#2b3b31;border-radius:99px;overflow:hidden;margin:10px 0}.bar i{display:block;height:100%;background:var(--green);width:0}
+.item{padding:11px 0;border-bottom:1px solid var(--line)}.item:last-child{border:0}.item strong{display:block}.item small{color:var(--muted)}
+table{width:100%;border-collapse:collapse;font-size:13px}td,th{text-align:left;padding:9px 5px;border-bottom:1px solid var(--line)}th{color:var(--muted);font-weight:600}
+.exercise{display:grid;grid-template-columns:1fr 75px 75px;gap:7px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line);font-size:13px}.exercise input{margin:0;padding:8px}
+.check{display:flex;align-items:center;gap:9px;padding:9px 0;border-bottom:1px solid var(--line)}.check input{width:18px;height:18px;margin:0;accent-color:#9be3ae}
+.hidden{display:none!important}.pill{display:inline-block;background:#26392d;color:var(--green);padding:5px 9px;border-radius:30px;font-size:11px}
+.notice{color:var(--muted);font-size:12px;line-height:1.5}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+@media(min-width:600px){.grid{grid-template-columns:repeat(4,1fr)}}
+</style>
+</head>
+<body>
+<header><div class="top"><div class="brand">PERSONAL FITNESS TRACKER</div><div class="date" id="today"></div></div><h1>Stay consistent.</h1><p>Build strength. Lose body fat. Track your progress.</p></header>
+<main>
+<section id="home" class="page active">
+ <div class="grid">
+  <div class="metric"><small>CURRENT WEIGHT</small><strong id="currentWeight">78.5kg</strong></div>
+  <div class="metric"><small>DEC 29 TARGET</small><strong class="green">74.5–75kg</strong></div>
+  <div class="metric"><small>BODY FAT START</small><strong>26.5%</strong></div>
+  <div class="metric"><small>PROTEIN TARGET</small><strong>150–160g</strong></div>
+ </div>
+ <div class="card"><div class="top"><h2>Progress to target</h2><span class="pill" id="lossText">0kg lost</span></div><div class="bar"><i id="progressBar"></i></div><p class="sub">Starting weight 78.5kg · Target midpoint 74.75kg · Deadline 29 December 2026</p></div>
+ <div class="card"><h2>Today's habits</h2><div id="homeHabits"></div><p class="sub" id="habitCount"></p></div>
+ <div class="card"><h2>This week's training</h2><p>MON · Push + Legs　 WED · Pull + Posterior + Core</p><p>SAT · Full Body　 FRI or SUN · Football once weekly</p><p class="sub">No gym on Friday. Keep at least one recovery day.</p></div>
+ <div class="card"><h2>Quick add</h2><div class="actions"><button onclick="showPage('weight')">＋ Weight entry</button><button class="secondary" onclick="showPage('diet')">Log nutrition</button><button class="secondary" onclick="showPage('workouts')">Open workout</button></div></div>
+</section>
+
+<section id="workouts" class="page">
+ <h2>Workout plan</h2><p class="sub">Log the weight used and reps completed. Adjust loads to keep good form and 1–2 reps in reserve.</p>
+ <div class="card"><label>Choose session</label><select id="sessionSelect" onchange="renderWorkout()"><option value="Monday">Monday · Push + Legs</option><option value="Wednesday">Wednesday · Pull + Posterior + Core</option><option value="Saturday">Saturday · Full Body</option></select><div id="workoutList"></div><div class="actions"><button onclick="saveWorkout()">Save session</button><button class="secondary" onclick="clearWorkoutInputs()">Clear inputs</button></div><p class="sub" id="workoutSaved"></p></div>
+ <div class="card"><h3>Progression guide</h3><p class="notice">Reach the top of the rep range on all sets with controlled technique before adding a small amount of weight. Rest 2–3 minutes on compound lifts and 60–90 seconds on accessories. Don't force weekly increases.</p></div>
+</section>
+
+<section id="weight" class="page">
+ <h2>Weight tracker</h2><div class="card"><h3>Add weigh-in</h3><label>Date</label><input type="date" id="weightDate"><label>Weight (kg)</label><input type="number" step="0.1" id="weightValue" placeholder="e.g. 78.2"><label>Body fat % (optional)</label><input type="number" step="0.1" id="fatValue" placeholder="e.g. 26.1"><button onclick="addWeight()">Save weigh-in</button></div>
+ <div class="card"><h3>Weight history</h3><div id="weightHistory"></div></div>
+ <div class="card"><h3>Weekly guide</h3><table><tr><th>Week ending</th><th>Target</th></tr><tr><td>8 Nov</td><td>78.0kg</td></tr><tr><td>15 Nov</td><td>77.5kg</td></tr><tr><td>22 Nov</td><td>77.0kg</td></tr><tr><td>29 Nov</td><td>76.5kg</td></tr><tr><td>6 Dec</td><td>76.0kg</td></tr><tr><td>13 Dec</td><td>75.5kg</td></tr><tr><td>20 Dec</td><td>75.0kg</td></tr><tr><td>29 Dec</td><td>74.5–75kg</td></tr></table><p class="notice">Use morning weigh-ins and compare weekly averages, not individual fluctuations.</p></div>
+</section>
+
+<section id="diet" class="page">
+ <h2>Diet overview</h2><div class="grid">
+ <div class="metric"><small>CALORIES</small><strong>1,900–2,100</strong></div><div class="metric"><small>PROTEIN</small><strong>150–160g</strong></div><div class="metric"><small>CARBS</small><strong>170–210g</strong></div><div class="metric"><small>FAT</small><strong>55–70g</strong></div></div>
+ <div class="card"><h3>Daily nutrition log</h3><label>Calories</label><input id="calories" type="number" placeholder="e.g. 2000"><label>Protein (g)</label><input id="protein" type="number" placeholder="e.g. 155"><label>Carbs (g)</label><input id="carbs" type="number" placeholder="e.g. 190"><label>Fat (g)</label><input id="fat" type="number" placeholder="e.g. 65"><label>Water (litres)</label><input id="water" type="number" step=".1" placeholder="e.g. 2.5"><button onclick="saveDiet()">Save today's totals</button><p id="dietSaved" class="sub"></p></div>
+ <div class="card"><h3>Simple meal structure</h3><div class="item"><strong>12:30 · Lunch</strong><small>Chicken, rice and vegetables</small></div><div class="item"><strong>15:30 · Snack</strong><small>Greek yoghurt, protein shake or fruit</small></div><div class="item"><strong>17:30–18:30 · Dinner</strong><small>Halal lean meat, chicken or fish with salad</small></div><p class="notice">Optional 12:30–18:30 eating window. Fasting is not essential. Include carbohydrates around football and demanding training when needed.</p></div>
+ </section>
+
+<section id="habits" class="page">
+ <h2>Daily checklist</h2><p class="sub">Tick off each habit as you go. Your checklist resets when you choose a new date.</p>
+ <div class="card"><label>Checklist date</label><input type="date" id="habitDate" onchange="renderHabits()"><div id="habitList"></div><div class="actions"><button class="secondary" onclick="resetHabits()">Reset this date</button></div></div>
+ <div class="card"><h3>Weekly review</h3><label>Weekly average weight (kg)</label><input id="reviewWeight" type="number" step=".1"><label>Waist (cm)</label><input id="reviewWaist" type="number" step=".1"><label>Gym sessions completed (out of 3)</label><input id="reviewGym" type="number" min="0" max="3"><label>Energy / recovery notes</label><input id="reviewNotes" placeholder="How did the week feel?"><button onclick="saveReview()">Save review</button><p class="sub" id="reviewSaved"></p></div>
+</section>
+</main>
+<nav>
+<button class="active" data-page="home" onclick="showPage('home')"><span>⌂</span>Home</button>
+<button data-page="workouts" onclick="showPage('workouts')"><span>🏋</span>Workout</button>
+<button data-page="weight" onclick="showPage('weight')"><span>⚖</span>Weight</button>
+<button data-page="diet" onclick="showPage('diet')"><span>🥗</span>Diet</button>
+<button data-page="habits" onclick="showPage('habits')"><span>✓</span>Habits</button>
+</nav>
+<script>
+const KEY='fitTracker2026';
+const initial={
+ weights:[{date:'2026-11-02',weight:78.5,fat:26.5}],
+ habits:{},
+ workouts:{},
+ diet:{},
+ reviews:[]
+};
+let data=JSON.parse(localStorage.getItem(KEY)||'null')||initial;
+const plans={
+ Monday:[['Squat','3 × 6–10','80–85kg'],['Bench press','3 × 6–10','65–70kg'],['Incline DB press','3 × 8–10','24–26kg each'],['Pull-ups','3 × 6–10','Bodyweight'],['Leg press','3 × 12–15','Controlled'],['Walking lunges','2 × 10 each','10kg DBs'],['Lateral raises','3 × 12–15','6–8kg'],['Plank','3 × 45–60 sec','Bodyweight']],
+ Wednesday:[['Romanian deadlift','3 × 8','75–85kg'],['Barbell row','3 × 8–10','55–60kg'],['Lat pulldown','3 × 10–12','55–60kg'],['Chest-supported row','3 × 10–12','Moderate'],['Face pulls','3 × 15','Controlled'],['Hamstring curl','3 × 12–15','Controlled'],['EZ-bar curls','3 × 10–12','Controlled'],['Hanging leg raises','3 × 12','Bodyweight'],['Cable crunch','3 × 15','Controlled'],['Side plank','2 × 30–45 sec','Each side']],
+ Saturday:[['DB bench press','3 × 10','24–26kg each'],['Seated cable row','3 × 12','55–60kg'],['Leg press','3 × 12','Moderate'],['DB shoulder press','3 × 10','18–20kg each'],['Lateral raises','3 × 15','6–8kg'],['Biceps curls','3 × 12','Controlled'],['Rope triceps pushdown','3 × 12–15','Controlled'],['Hanging knee raises','3 × 12','Bodyweight'],['Incline treadmill','12 mins','Moderate']]
+};
+const habitsList=['Hit protein target (150–160g)','Stay within calorie range','Drink 2–3L water','Reach 10,000 steps','Complete planned training / recovery','Get 7–8 hours sleep'];
+function persist(){localStorage.setItem(KEY,JSON.stringify(data));}
+function showPage(id){document.querySelectorAll('.page').forEach(x=>x.classList.toggle('active',x.id===id));document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('active',x.dataset.page===id));if(id==='weight')renderWeights();if(id==='workouts')renderWorkout();if(id==='habits')renderHabits();}
+function renderWorkout(){let day=document.getElementById('sessionSelect').value;let saved=data.workouts[day]||{};document.getElementById('workoutList').innerHTML=plans[day].map((e,i)=>`<div class="exercise"><div><b>${e[0]}</b><br><small>${e[1]} · Guide: ${e[2]}</small></div><input aria-label="Weight ${e[0]}" id="ww${i}" placeholder="kg" value="${saved[i]?.weight||''}"><input aria-label="Reps ${e[0]}" id="wr${i}" placeholder="reps" value="${saved[i]?.reps||''}"></div>`).join('');}
+function saveWorkout(){let day=document.getElementById('sessionSelect').value;data.workouts[day]=plans[day].map((e,i)=>({weight:document.getElementById('ww'+i).value,reps:document.getElementById('wr'+i).value}));persist();document.getElementById('workoutSaved').textContent='Session saved on this device.';}
+function clearWorkoutInputs(){plans[document.getElementById('sessionSelect').value].forEach((e,i)=>{document.getElementById('ww'+i).value='';document.getElementById('wr'+i).value='';});}
+function addWeight(){let date=document.getElementById('weightDate').value,weight=parseFloat(document.getElementById('weightValue').value),fat=parseFloat(document.getElementById('fatValue').value);if(!date||!weight){alert('Enter a date and weight.');return;}data.weights=data.weights.filter(x=>x.date!==date);data.weights.push({date,weight,fat:Number.isFinite(fat)?fat:null});data.weights.sort((a,b)=>a.date.localeCompare(b.date));persist();renderWeights();updateHome();document.getElementById('weightValue').value='';document.getElementById('fatValue').value='';}
+function renderWeights(){let el=document.getElementById('weightHistory');el.innerHTML=data.weights.slice().reverse().map(x=>`<div class="item"><strong>${x.weight.toFixed(1)}kg · ${x.date}</strong><small>${x.fat==null?'Body fat not entered':x.fat+'% body fat'}</small></div>`).join('')||'<p class="sub">No weigh-ins yet.</p>';}
+function updateHome(){let last=data.weights[data.weights.length-1];document.getElementById('currentWeight').textContent=(last?.weight||78.5).toFixed(1)+'kg';let lost=78.5-(last?.weight||78.5);document.getElementById('lossText').textContent=(lost>=0?lost.toFixed(1)+'kg lost':Math.abs(lost).toFixed(1)+'kg up');document.getElementById('progressBar').style.width=Math.max(0,Math.min(100,lost/3.75*100))+'%';}
+function saveDiet(){let d=new Date().toISOString().slice(0,10);data.diet[d]={calories:val('calories'),protein:val('protein'),carbs:val('carbs'),fat:val('fat'),water:val('water')};persist();document.getElementById('dietSaved').textContent='Saved for '+d+'.';}
+function val(id){return document.getElementById(id).value;}
+function renderHabits(){let date=document.getElementById('habitDate').value||new Date().toISOString().slice(0,10);document.getElementById('habitDate').value=date;let done=data.habits[date]||[];document.getElementById('habitList').innerHTML=habitsList.map((h,i)=>`<label class="check"><input type="checkbox" ${done.includes(i)?'checked':''} onchange="toggleHabit(${i},this.checked)"><span>${h}</span></label>`).join('');document.getElementById('homeHabits').innerHTML=habitsList.map((h,i)=>`<label class="check"><input type="checkbox" ${done.includes(i)?'checked':''} onchange="toggleHabit(${i},this.checked)"><span>${h}</span></label>`).join('');document.getElementById('habitCount').textContent=done.length+' of 6 habits completed';}
+function toggleHabit(i,on){let d=document.getElementById('habitDate').value||new Date().toISOString().slice(0,10);let a=data.habits[d]||[];data.habits[d]=on?[...new Set([...a,i])]:a.filter(x=>x!==i);persist();renderHabits();}
+function resetHabits(){let d=document.getElementById('habitDate').value;data.habits[d]=[];persist();renderHabits();}
+function saveReview(){data.reviews.push({date:new Date().toISOString().slice(0,10),weight:val('reviewWeight'),waist:val('reviewWaist'),gym:val('reviewGym'),notes:val('reviewNotes')});persist();document.getElementById('reviewSaved').textContent='Weekly review saved.';}
+document.getElementById('today').textContent=new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+document.getElementById('weightDate').value=new Date().toISOString().slice(0,10);
+document.getElementById('habitDate').value=new Date().toISOString().slice(0,10);
+updateHome();renderWorkout();renderWeights();renderHabits();
+if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));
+</script>
+</body></html>
