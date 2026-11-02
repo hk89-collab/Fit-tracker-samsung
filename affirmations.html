@@ -1,1 +1,375 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101713">
+  <title>Daily Affirmations | Fitness Tracker</title>
+
+  <style>
+    :root {
+      --bg: #0d1411;
+      --panel: #17221c;
+      --text: #f3f7f4;
+      --muted: #a8b8ae;
+      --green: #9be3ae;
+      --line: #2d4035;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 20px 16px 50px;
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, -apple-system, Segoe UI, sans-serif;
+    }
+
+    .container {
+      max-width: 760px;
+      margin: auto;
+    }
+
+    .back {
+      display: inline-block;
+      color: var(--green);
+      text-decoration: none;
+      margin-bottom: 22px;
+      font-size: 14px;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 27px;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 25px;
+    }
+
+    .progress-box {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      padding: 20px;
+      border-radius: 17px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .progress-box h2 {
+      margin-top: 0;
+      font-size: 19px;
+    }
+
+    .progress-bar {
+      background: #2b3b31;
+      height: 11px;
+      border-radius: 20px;
+      overflow: hidden;
+      margin-top: 14px;
+    }
+
+    .progress-fill {
+      width: 0%;
+      height: 100%;
+      background: var(--green);
+      transition: width 0.3s ease;
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      padding: 20px;
+      border-radius: 17px;
+      margin-bottom: 14px;
+    }
+
+    .card h2 {
+      color: var(--green);
+      font-size: 18px;
+      margin-top: 0;
+    }
+
+    .card p {
+      color: var(--text);
+      font-size: 15px;
+      line-height: 1.8;
+      white-space: normal;
+    }
+
+    .check-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 18px;
+      color: var(--green);
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    input[type="checkbox"] {
+      width: 21px;
+      height: 21px;
+      flex-shrink: 0;
+      accent-color: var(--green);
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      background: #26392d;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <a class="back" href="./index.html">
+      ← Back to Fitness Tracker
+    </a>
+
+    <h1>🌟 Daily Affirmations</h1>
+
+    <p class="subtitle">
+      Begin each day with faith, gratitude,
+      discipline and love.
+    </p>
+
+    <div class="progress-box">
+      <h2>Today's Progress</h2>
+      <div id="progressText">0 of 7 completed</div>
+
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+    </div>
+
+    <div id="affirmations"></div>
+
+    <button id="resetButton">
+      Reset Today's Checklist
+    </button>
+
+    <p class="footer">
+      Bismillah. One day at a time.
+    </p>
+
+  </div>
+
+  <script>
+    const affirmations = [
+      {
+        title: "☪️ Islamic Affirmation",
+        text: `I begin today with Bismillah,
+knowing that Allah is with me.
+I trust His timing, remain grateful
+for His blessings and face every
+challenge with sabr. I will make
+sincere effort, leave the outcome
+to Allah and strive to become
+a better Muslim every day.`
+      },
+      {
+        title: "🏡 Family Affirmation",
+        text: `My family is one of my greatest
+blessings. I choose to give them
+my time, patience, attention and
+love. Success means more than
+what I earn or achieve; it means
+creating a home filled with
+happiness, security, laughter
+and beautiful memories.`
+      },
+      {
+        title: "👨‍👦 Children Affirmation",
+        text: `My children are growing every
+single day, and these precious
+years will never come again.
+Today, I will appreciate their
+smiles, listen to their stories,
+play with them and be fully
+present. They don't need a
+perfect father; they need a
+loving, patient and involved one.`
+      },
+      {
+        title: "❤️ Wife Affirmation",
+        text: `My wife is my partner, my
+companion and one of Allah's
+greatest blessings in my life.
+I will never take her love,
+effort or presence for granted.
+Today, I choose to make her feel
+beautiful, valued, supported
+and deeply loved — not just
+through words, but through
+my actions.`
+      },
+      {
+        title: "💪 Gym Affirmation",
+        text: `I train because I respect my
+body and want to become stronger,
+healthier and more capable.
+Motivation comes and goes, but
+discipline keeps me moving.
+Every workout, every repetition
+and every effort counts.
+I don't need to be perfect;
+I need to be consistent.`
+      },
+      {
+        title: "🥗 Diet Affirmation",
+        text: `I am in control of my choices,
+and I choose foods that nourish
+my body and support my goals.
+Temporary cravings will not
+dictate my long-term progress.
+I can enjoy food without losing
+discipline. One imperfect meal
+does not undo my efforts;
+I simply return to my plan
+with the next choice.`
+      },
+      {
+        title: "☀️ Overall Daily Affirmation",
+        text: `Today is another opportunity
+Allah has given me. I will be
+grateful for what I have,
+disciplined in what I do and
+patient with what I cannot
+control. I will show up for
+my wife, cherish my children,
+protect my health, work towards
+my goals and treat others with
+kindness. I will not let
+yesterday's worries steal
+today's blessings. I am
+becoming a better man, husband,
+father and Muslim — one day
+at a time.`
+      }
+    ];
+
+    const container =
+      document.getElementById("affirmations");
+
+    const progressText =
+      document.getElementById("progressText");
+
+    const progressFill =
+      document.getElementById("progressFill");
+
+    // Local calendar date ensures a new checklist each day.
+    const now = new Date();
+
+    const dateKey = [
+      now.getFullYear(),
+      String(now.getMonth() + 1).padStart(2, "0"),
+      String(now.getDate()).padStart(2, "0")
+    ].join("-");
+
+    const storageKey = "dailyAffirmations-" + dateKey;
+
+    let completed = [];
+
+    try {
+      completed = JSON.parse(
+        localStorage.getItem(storageKey) || "[]"
+      );
+
+      if (!Array.isArray(completed)) {
+        completed = [];
+      }
+    } catch (error) {
+      completed = [];
+    }
+
+    function saveProgress() {
+      localStorage.setItem(
+        storageKey,
+        JSON.stringify(completed)
+      );
+    }
+
+    function updateProgress() {
+      const count = completed.filter(Boolean).length;
+
+      progressText.textContent =
+        count + " of " + affirmations.length + " completed";
+
+      progressFill.style.width =
+        (count / affirmations.length * 100) + "%";
+    }
+
+    function renderAffirmations() {
+      container.replaceChildren();
+
+      affirmations.forEach((item, index) => {
+        const card = document.createElement("div");
+        card.className = "card";
+
+        const heading = document.createElement("h2");
+        heading.textContent = item.title;
+
+        const paragraph = document.createElement("p");
+        paragraph.textContent = item.text.replace(/\s+/g, " ").trim();
+
+        const label = document.createElement("label");
+        label.className = "check-label";
+
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.checked = Boolean(completed[index]);
+
+        checkbox.addEventListener("change", () => {
+          completed[index] = checkbox.checked;
+          saveProgress();
+          updateProgress();
+        });
+
+        const labelText = document.createElement("span");
+        labelText.textContent = "I've read this affirmation today";
+
+        label.append(checkbox, labelText);
+        card.append(heading, paragraph, label);
+        container.appendChild(card);
+      });
+
+      updateProgress();
+    }
+
+    document.getElementById("resetButton")
+      .addEventListener("click", () => {
+        completed = [];
+        saveProgress();
+        renderAffirmations();
+      });
+
+    renderAffirmations();
+  </script>
+</body>
+</html>
+
