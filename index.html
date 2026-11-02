@@ -51,6 +51,22 @@ table{width:100%;border-collapse:collapse;font-size:13px}td,th{text-align:left;p
  <div class="card"><h2>Quick add</h2><div class="actions"><button onclick="showPage('weight')">＋ Weight entry</button><button class="secondary" onclick="showPage('diet')">Log nutrition</button><button class="secondary" onclick="showPage('workouts')">Open workout</button></div></div>
 </section>
 
+<div class="card">
+  <h2>🌟 Daily Affirmations</h2>
+  <p class="sub">
+    Start your day with faith, gratitude, love,
+    discipline and motivation.
+  </p>
+
+  <div class="actions">
+    <a href="./affirmations.html"
+       class="btn"
+       style="display:inline-block;text-decoration:none;">
+      🌟 Read My 7 Affirmations
+    </a>
+  </div>
+</div>
+
 <section id="workouts" class="page">
  <h2>Workout plan</h2><p class="sub">Log the weight used and reps completed. Adjust loads to keep good form and 1–2 reps in reserve.</p>
  <div class="card"><label>Choose session</label><select id="sessionSelect" onchange="renderWorkout()"><option value="Monday">Monday · Push + Legs</option><option value="Wednesday">Wednesday · Pull + Posterior + Core</option><option value="Saturday">Saturday · Full Body</option></select><div id="workoutList"></div><div class="actions"><button onclick="saveWorkout()">Save session</button><button class="secondary" onclick="clearWorkoutInputs()">Clear inputs</button></div><p class="sub" id="workoutSaved"></p></div>
